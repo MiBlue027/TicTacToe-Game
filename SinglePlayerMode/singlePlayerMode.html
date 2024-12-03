@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<!--    Poppins Font --------------------------------------------------------------------------------------->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<!--    Box Icon Font --------------------------------->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <link rel="stylesheet" href="singlePlayerModeStyle.css">
+
+    <title> Single Player </title>
+</head>
+<body>
+    <div id="absoluteMessageContainer">
+        <div id="absoluteMessage"> Message </div>
+    </div>
+    <div class="wrapper">
+        <div id="gameMessage"></div>
+        <div id="rpsGameContainer">
+            <div id="rock" class="rpsBox" onclick="rpsGame(1)"> <h1> Rock </h1> </div>
+            <div id="scissors" class="rpsBox" onclick="rpsGame(2)"> <h1> Scissors </h1> </div>
+            <div id="paper" class="rpsBox" onclick="rpsGame(3)"> <h1> Paper </h1> </div>
+        </div>
+        <div id="gameModeTitle">
+            <h1> Single Player Mode </h1>
+        </div>
+        <div id="gameInformation">
+            <h1> Round 1 </h1>
+            <p id="gameTurn"></p>
+        </div>
+        <div id="boardContainer">
+            <div class="cells" id="cell1" onclick="cellClicked(0, 0)"></div>
+            <div class="cells" id="cell2" onclick="cellClicked(0, 1)"></div>
+            <div class="cells" id="cell3" onclick="cellClicked(0, 2)"></div>
+            <div class="cells" id="cell4" onclick="cellClicked(1, 0)"></div>
+            <div class="cells" id="cell5" onclick="cellClicked(1, 1)"></div>
+            <div class="cells" id="cell6" onclick="cellClicked(1, 2)"></div>
+            <div class="cells" id="cell7" onclick="cellClicked(2, 0)"></div>
+            <div class="cells" id="cell8" onclick="cellClicked(2, 1)"></div>
+            <div class="cells" id="cell9" onclick="cellClicked(2, 2)"></div>
+        </div>
+    </div>
+
+    <script src="singlePlayerModeJS.js"></script>
+</body>
+</html>
