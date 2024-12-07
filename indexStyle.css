@@ -1,0 +1,78 @@
+* {
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+}
+
+#wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#menuContainer{
+    width: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#settingContainer{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.inputBox, #gameChallengeContainer{
+    width: 45%;
+    margin: 20px 0;
+}
+.inputBox input{
+    width: 100%;
+    border: none;
+    border-bottom: solid .1em #070714;
+    outline: none;
+    font-size: .9em;
+}
+.inputBox label{
+    position: absolute;
+    translate: 0 -25px;
+    font-size: .9em;
+    transition: .3s;
+}
+.inputBox input:focus~label,
+.inputBox input:valid~label{
+    translate: 0 -50px;
+    font-size: .85em;
+}
+#gameChallenge{
+    width: 100%;
+    padding: 2px 0;
+    font-size: .9em;
+}
+#gameModeContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#gameModeContainer button{
+    width: 100%;
+    height: 50px;
+    margin: 20px 0;
+}

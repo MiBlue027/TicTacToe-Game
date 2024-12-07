@@ -3,6 +3,10 @@
 
 let gameCounterTurn = -1;
 let gameEnd = 0;
+let startCounter = 0;
+
+let playerPoint = 0;
+let computerPoint = 0;
 
 // Absolute Message Handler -------------------------------------------------------------------------------------
 
@@ -21,6 +25,20 @@ function showAbsoluteMessage(message, time){
     }, time);
 
 }
+
+// Game Round Handler -------------------------------------------------------------------------------------------
+
+const totalRound = localStorage.getItem('totalRound');
+const gameChallenge =  localStorage.getItem('gameChallenge');
+const gameRound = document.getElementById('gameRound');
+let currentRound = 0;
+
+function showCurrentRound(round){
+    gameRound.innerHTML = "Round " + round;
+    showAbsoluteMessage("Round " + round, 1000);
+
+}
+
 
 // Game Turn Handler ---------------------------------------------------------------------------------------
 
@@ -90,23 +108,40 @@ function checkRPSScore() {
     if (playerRSPPoint > computerRSPPoint) {
         setTimeout(function (){
             rpsGameContainer.style.opacity = '0';
-            gameCounterTurn = 1;
+            gameCounterTurn = startCounter = 1;
             showGameTurn("Player's Turn");
             setTimeout(function (){
                 rpsGameContainer.style.display = 'none';
+
+                setTimeout(function (){
+                    showCurrentRound(currentRound + 1);
+                    setTimeout(function () {
+                        resetCells();
+                    }, 50);
+                }, 200);
+
             }, 500);
         }, 1200);
     } else if (playerRSPPoint < computerRSPPoint){
         setTimeout(function (){
             rpsGameContainer.style.opacity = '0';
-            gameCounterTurn = 2;
+            gameCounterTurn = startCounter = 2;
             showGameTurn("Computer's Turn");
             setTimeout(function (){
                 rpsGameContainer.style.display = 'none';
-                computerLogic();
+
+                setTimeout(function (){
+                    showCurrentRound(currentRound + 1);
+                    resetCells();
+                    setTimeout(function (){
+                        computerLogic();
+                    }, 500);
+                }, 10);
+
             }, 500);
         }, 1200);
     }
+
 }
 
 // Tic Tac Toe Logic -----------------------------------------------------------------
@@ -128,7 +163,7 @@ const cell8 = document.getElementById('cell8');
 const cell9 = document.getElementById('cell9');
 
 function cellClicked(row, col){
-    if (gameCounterTurn % 2 !== 0) {
+    if (gameCounterTurn % 2 !== 0 && boardArr[row][col] === 0) {
         boardArr[row][col] = 1;
         if (row === 0 && col === 0) cell1.innerHTML = "<i class='bx bx-radio-circle' ></i>";
         if (row === 0 && col === 1) cell2.innerHTML = "<i class='bx bx-radio-circle' ></i>";
@@ -141,7 +176,7 @@ function cellClicked(row, col){
         if (row === 2 && col === 2) cell9.innerHTML = "<i class='bx bx-radio-circle' ></i>";
         changeOfTurn()
     }
-    console.log(boardArr);
+    // console.log(boardArr);
 }
 
 function changeOfTurn(){
@@ -291,24 +326,63 @@ function gameChecker(){
     // Computer Vertical
     for (let i = 0; i < 3; i++) {
         if (boardArr[i][0] === 1 && boardArr[i][1] === 1 && boardArr[i][2] === 1){
-            showAbsoluteMessage('Player Wins!', 3000);
+            changeHorizontalCellColor(i);
+            showAbsoluteMessage('Player Wins!', 1000);
+            startCounter = 2;
             gameEndStatus = true;
             break
         }
         else if (boardArr[i][0] === 2 && boardArr[i][1] === 2 && boardArr[i][2] === 2){
-            showAbsoluteMessage('Computer Wins!', 3000);
+            changeHorizontalCellColor(i);
+            showAbsoluteMessage('Computer Wins!', 1000);
+            startCounter = 1;
             gameEndStatus = true;
             break
         }
         else if (boardArr[0][i] === 1 && boardArr[1][i] === 1 && boardArr[2][i] === 1){
-            showAbsoluteMessage('Player Wins!', 3000);
+            changeVerticalCellColor(i);
+            showAbsoluteMessage('Player Wins!', 1000);
+            startCounter = 2;
             gameEndStatus = true;
             break
         }
         else if (boardArr[0][i] === 2 && boardArr[1][i] === 2 && boardArr[2][i] === 2){
-            showAbsoluteMessage('Computer Wins!', 3000);
+            changeVerticalCellColor(i);
+            showAbsoluteMessage('Computer Wins!', 1000);
+            startCounter = 1;
             gameEndStatus = true;
             break
+        }
+    }
+
+    function changeHorizontalCellColor(i){
+        if (i === 0){
+            cell1.style.color = '#4df163';
+            cell2.style.color = '#4df163';
+            cell3.style.color = '#4df163';
+        } else if (i === 1){
+            cell4.style.color = '#4df163';
+            cell5.style.color = '#4df163';
+            cell6.style.color = '#4df163';
+        } else if (i === 2){
+            cell7.style.color = '#4df163';
+            cell8.style.color = '#4df163';
+            cell9.style.color = '#4df163';
+        }
+    }
+    function changeVerticalCellColor(i){
+        if (i === 0){
+            cell1.style.color = '#4df163';
+            cell4.style.color = '#4df163';
+            cell7.style.color = '#4df163';
+        } else if (i === 1){
+            cell2.style.color = '#4df163';
+            cell5.style.color = '#4df163';
+            cell8.style.color = '#4df163';
+        } else if (i === 2){
+            cell3.style.color = '#4df163';
+            cell6.style.color = '#4df163';
+            cell9.style.color = '#4df163';
         }
     }
 
@@ -316,15 +390,36 @@ function gameChecker(){
     if (!gameEndStatus){
         for (let i = 0; i < 2; i++) {
             if (boardArr[0][i+i] === 1 && boardArr[1][1] === 1 && boardArr[2][2-i*2] === 1){
-                showAbsoluteMessage('Player Wins!', 3000);
+                changeDiagonalColor(i);
+                showAbsoluteMessage('Player Wins!', 1000);
+                disableCells();
+                startCounter = 2;
                 gameEndStatus = true;
+                playerPoint++;
                 break
             }
             else if (boardArr[0][i+i] === 2 && boardArr[1][1] === 2 && boardArr[2][2-i*2] === 2){
-                showAbsoluteMessage('Computer Wins!', 3000);
+                changeDiagonalColor(i);
+                showAbsoluteMessage('Computer Wins!', 1000);
+                disableCells();
+                startCounter = 1;
                 gameEndStatus = true;
+                computerPoint++;
                 break
             }
+        }
+    }
+
+    function changeDiagonalColor(i){
+        if (i === 0){
+            cell1.style.color = '#4df163';
+            cell5.style.color = '#4df163';
+            cell9.style.color = '#4df163';
+        }
+        else if (i === 1){
+            cell3.style.color = '#4df163';
+            cell5.style.color = '#4df163';
+            cell7.style.color = '#4df163';
         }
     }
 
@@ -337,5 +432,80 @@ function gameChecker(){
             }, 500);
 
         }
-    } else if (!gameEndStatus && gameEnd === 9) showAbsoluteMessage('Draw!', 3000);
+    } else if (!gameEndStatus && gameEnd === 9) {
+        showAbsoluteMessage('Draw!', 1000);
+        disableCells();
+        gameEndStatus = true;
+    }
+
+    setTimeout(function (){
+        if (gameEndStatus && ++currentRound < totalRound){
+            gameResetRound();
+        }
+    }, 2000);
+
+}
+
+function gameResetRound(){
+    boardArr = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ];
+    gameEnd = 0;
+
+    showCurrentRound(currentRound + 1)
+    resetCells();
+}
+
+function disableCells() {
+    cell1.style.pointerEvents = 'none';
+    cell2.style.pointerEvents = 'none';
+    cell3.style.pointerEvents = 'none';
+    cell4.style.pointerEvents = 'none';
+    cell5.style.pointerEvents = 'none';
+    cell6.style.pointerEvents = 'none';
+    cell7.style.pointerEvents = 'none';
+    cell8.style.pointerEvents = 'none';
+    cell9.style.pointerEvents = 'none';
+}
+function resetCells() {
+    // Cell Content
+    cell1.innerHTML = "";
+    cell2.innerHTML = "";
+    cell3.innerHTML = "";
+    cell4.innerHTML = "";
+    cell5.innerHTML = "";
+    cell6.innerHTML = "";
+    cell7.innerHTML = "";
+    cell8.innerHTML = "";
+    cell9.innerHTML = "";
+    // Cell Color
+    cell1.style.color = '#000000';
+    cell2.style.color = '#000000';
+    cell3.style.color = '#000000';
+    cell4.style.color = '#000000';
+    cell5.style.color = '#000000';
+    cell6.style.color = '#000000';
+    cell7.style.color = '#000000';
+    cell8.style.color = '#000000';
+    cell9.style.color = '#000000';
+
+    cell1.style.pointerEvents = 'all';
+    cell2.style.pointerEvents = 'all';
+    cell3.style.pointerEvents = 'all';
+    cell4.style.pointerEvents = 'all';
+    cell5.style.pointerEvents = 'all';
+    cell6.style.pointerEvents = 'all';
+    cell7.style.pointerEvents = 'all';
+    cell8.style.pointerEvents = 'all';
+    cell9.style.pointerEvents = 'all';
+
+    gameCounterTurn = startCounter;
+    changeGameTurnText();
+    if (gameCounterTurn === 2) {
+        setTimeout(function (){
+            computerLogic();
+        }, 500);
+    }
 }
