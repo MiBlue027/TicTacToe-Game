@@ -14,11 +14,19 @@
 <!--    Box Icon Font --------------------------------->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <link rel="stylesheet" href="singlePlayerModeStyle.css">
+    <link rel="stylesheet" href="gamePlayStyle.css">
 
     <title> Single Player </title>
 </head>
 <body>
+    <div id="homeBTN" onclick="backToHome()"> <span> <ion-icon name="home"></ion-icon> </span> </div>
+    <script>
+        function backToHome() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+    </script>
+
     <div id="absoluteMessageContainer">
         <div id="absoluteMessage"> Message </div>
     </div>
@@ -30,7 +38,7 @@
             <div id="paper" class="rpsBox" onclick="rpsGame(3)"> <h1> Paper </h1> </div>
         </div>
         <div id="gameModeTitle">
-            <h1> Single Player Mode </h1>
+            <h1 id="gameModeTitleText"> Single Player Mode </h1>
         </div>
         <div id="gameInformation">
             <h1 id="gameRound"> Round 1 </h1>
@@ -49,6 +57,9 @@
         </div>
     </div>
 
-    <script src="singlePlayerModeJS.js"></script>
+    <script src="gamePlayJS.js"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

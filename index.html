@@ -23,7 +23,7 @@
         <div id="menuContainer">
             <div id="settingContainer">
                 <div class="inputBox">
-                    <input type="number" id="totalRoundIN" max="25" required>
+                    <input type="number" id="totalRoundIN" min="1" max="25" required>
                     <label for="totalRoundIN"> Total Round </label>
                 </div>
 
@@ -55,8 +55,9 @@
                     const gameChallenge = document.getElementById('gameChallenge');
                     if (totalRoundIN.value !== "") {
                         localStorage.setItem('totalRound', totalRoundIN.value);
+                        localStorage.setItem('gameMode', 'Single Player Mode')
                         localStorage.setItem('gameChallenge', gameChallenge.value);
-                        window.location.href = 'SinglePlayerMode/singlePlayerMode.html';
+                        window.location.href = 'GamePlay/gamePlay.html';
                     }
                 }
             </script>
