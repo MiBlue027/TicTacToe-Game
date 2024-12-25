@@ -3,13 +3,26 @@ window.onload = function (){
     if (!localStorage.getItem('totalRound')) window.location.href = '../index.html';
 }
 
+// Main Cell DOM 0-------------------------------------------------------------------------------------
+
+const cell1 = document.getElementById('cell1');
+const cell2 = document.getElementById('cell2');
+const cell3 = document.getElementById('cell3');
+const cell4 = document.getElementById('cell4');
+const cell5 = document.getElementById('cell5');
+const cell6 = document.getElementById('cell6');
+const cell7 = document.getElementById('cell7');
+const cell8 = document.getElementById('cell8');
+const cell9 = document.getElementById('cell9');
+
 // Global Variable ------------------------------------------------------------------------------------------
 
 let gameCounterTurn = -1;
-let gameEnd = 0;
 let startCounter = 0;
+let gameEnd = 0;
 
 let playerPoint = 0;
+let player2Point = 0;
 let computerPoint = 0;
 
 const gameChallenge =  localStorage.getItem('gameChallenge');
@@ -59,15 +72,30 @@ function showGameTurn(message){
 }
 function changeGameTurnText(){
     if (gameCounterTurn % 2 !== 0) showGameTurn("Player1's Turn");
-    else showGameTurn("Computer's Turn");
+    else if (gameMode === 'Single Player Mode') showGameTurn("Computer's Turn");
+    else showGameTurn("Player2's Turn");
 }
+
+// RSP (Rok Scissors Paper) Game Show Handler ----------------------------------------------------------------------
+// Show in Single Player
+// Hide in Multi Player
+const rpsGameContainer = document.getElementById('rpsGameContainer');
+
+if (gameMode === 'Multi Player Mode'){
+    rpsGameContainer.style.display = 'none';
+    setTimeout(function (){
+        showCurrentRound(currentRound + 1);
+    }, 500);
+    gameCounterTurn = startCounter = 1;
+    showGameTurn("Player1's Turn");
+    resetCells();
+}
+
 
 // RSP (Rok Scissors Paper) Game Logic -----------------------------------------------------------------------------
 
 let playerRSPPoint = 0;
 let computerRSPPoint = 0;
-
-const rpsGameContainer = document.getElementById('rpsGameContainer');
 
 function computerRSPRandom(){
     return  Math.ceil(Math.random() * 10) % 3 + 1;
@@ -162,16 +190,7 @@ let boardArr = [
     [0, 0, 0]
 ];
 
-const cell1 = document.getElementById('cell1');
-const cell2 = document.getElementById('cell2');
-const cell3 = document.getElementById('cell3');
-const cell4 = document.getElementById('cell4');
-const cell5 = document.getElementById('cell5');
-const cell6 = document.getElementById('cell6');
-const cell7 = document.getElementById('cell7');
-const cell8 = document.getElementById('cell8');
-const cell9 = document.getElementById('cell9');
-
+// Cell DOM on Global Variable -------------------
 function cellClicked(row, col){
     if (gameCounterTurn % 2 !== 0 && boardArr[row][col] === 0 && challengeCounter < 6) {
         boardArr[row][col] = 1;
@@ -194,6 +213,31 @@ function cellClicked(row, col){
             resetCellColor(selectedCell[0], selectedCell[1]);
             selectedCell.length = 0;
             changeOfTurn();
+        }
+    }
+    if (gameMode === "Multi Player Mode"){
+        if (gameCounterTurn % 2 === 0 && boardArr[row][col] === 0 && challengeCounter < 6) {
+            boardArr[row][col] = 2;
+            markX(row, col);
+            changeOfTurn();
+
+        }
+        else if (gameCounterTurn % 2 === 0 && challengeCounter === 6){
+            if (selectedCell.length === 0 && boardArr[row][col] === 2){
+                selectedCell = [row, col];
+                changeCellColor(row, col);
+            } else if (row === selectedCell[0] && col === selectedCell[1] && boardArr[row][col] === 2){
+                selectedCell.length = 0;
+                resetCellColor(row, col);
+            } else if (selectedCell.length !== 0 && boardArr[row][col] === 0){
+                boardArr[row][col] = 2;
+                markX(row, col);
+                boardArr[selectedCell[0]][selectedCell[1]] = 0;
+                removeMark(selectedCell[0], selectedCell[1]);
+                resetCellColor(selectedCell[0], selectedCell[1]);
+                selectedCell.length = 0;
+                changeOfTurn();
+            }
         }
     }
     // console.log(challengeCounter);
@@ -395,7 +439,7 @@ function computerLogic() {
 
 // Challenge Mode Logic AI
 
-function challengeModLogic() {
+function challengeModeLogic() {
     let cellBlock = false;
     if (gameCounterTurn % 2 === 0 && challengeCounter === 6){
 
@@ -656,7 +700,6 @@ function challengeModLogic() {
                         }
                     }
                     if (blocked) {
-                        // console.log("BLOCKED")
                         break;
                     }
                 }
@@ -717,7 +760,11 @@ function gameChecker(){
         }
         else if (boardArr[i][0] === 2 && boardArr[i][1] === 2 && boardArr[i][2] === 2){
             changeHorizontalCellColor(i);
-            showAbsoluteMessage('Computer Wins!', 1000);
+            if (gameMode === "Single Player Mode"){
+                showAbsoluteMessage('Computer Wins!', 1000);
+            } else if (gameMode === "Multi Player Mode") {
+                showAbsoluteMessage('Player 2 Wins!', 1000);
+            }
             startCounter = 1;
             gameEndStatus = true;
             computerPoint++;
@@ -733,7 +780,11 @@ function gameChecker(){
         }
         else if (boardArr[0][i] === 2 && boardArr[1][i] === 2 && boardArr[2][i] === 2){
             changeVerticalCellColor(i);
-            showAbsoluteMessage('Computer Wins!', 1000);
+            if (gameMode === "Single Player Mode"){
+                showAbsoluteMessage('Computer Wins!', 1000);
+            } else if (gameMode === "Multi Player Mode") {
+                showAbsoluteMessage('Player 2 Wins!', 1000);
+            }
             startCounter = 1;
             gameEndStatus = true;
             computerPoint++;
@@ -786,7 +837,11 @@ function gameChecker(){
             }
             else if (boardArr[0][i+i] === 2 && boardArr[1][1] === 2 && boardArr[2][2-i*2] === 2){
                 changeDiagonalColor(i);
-                showAbsoluteMessage('Computer Wins!', 1000);
+                if (gameMode === "Single Player Mode"){
+                    showAbsoluteMessage('Computer Wins!', 1000);
+                } else if (gameMode === "Multi Player Mode") {
+                    showAbsoluteMessage('Player 2 Wins!', 1000);
+                }
                 disableCells();
                 startCounter = 1;
                 gameEndStatus = true;
@@ -815,8 +870,10 @@ function gameChecker(){
         changeGameTurnText();
         if (gameCounterTurn % 2 === 0) {
             setTimeout(function (){
-                if (gameChallenge === "challenge" && challengeCounter === 6) challengeModLogic();
-                else computerLogic();
+                if (gameMode === "Single Player Mode") {
+                    if (gameChallenge === "challenge" && challengeCounter === 6) challengeModeLogic();
+                    else computerLogic();
+                }
             }, 500);
 
         }
@@ -836,7 +893,8 @@ function gameChecker(){
             localStorage.setItem('gameMode', gameMode);
             localStorage.setItem('player1Point', playerPoint.toString());
             localStorage.setItem('player2Point', computerPoint.toString());
-            localStorage.setItem('player2Name', 'Computer')
+            if (gameMode === 'Single Player Mode') localStorage.setItem('player2Name', 'Computer')
+            else if (gameMode === 'Multi Player Mode') localStorage.setItem('player2Name', 'Player 2')
             window.location.href = 'resultView.html';
             setTimeout(function (){
                 window.location.reload();
@@ -905,7 +963,7 @@ function resetCells() {
 
     gameCounterTurn = startCounter;
     changeGameTurnText();
-    if (gameCounterTurn === 2) {
+    if (gameCounterTurn === 2 && gameMode === 'Single Player Mode') {
         setTimeout(function (){
             computerLogic();
         }, 500);

@@ -18,8 +18,8 @@ const winner = document.getElementById('winnerText');
 // console.log(winner)
 
 if (parseInt(player1Point) > parseInt(player2Point)) winner.innerHTML = 'Player 1 Wins!';
-else if (parseInt(player1Point) < parseInt(player2Point) && player2Name === 'Computer') winner.innerHTML = 'Computer Wins!';
-else if (parseInt(player1Point) < parseInt(player2Point) && player2Name !== 'Computer') winner.innerHTML = 'Player 2 Wins!';
+else if (parseInt(player1Point) < parseInt(player2Point) && gameMode === 'Single Player Mode') winner.innerHTML = 'Computer Wins!';
+else if (parseInt(player1Point) < parseInt(player2Point) && gameMode !== 'Multi Player Mode') winner.innerHTML = 'Player 2 Wins!';
 else if (parseInt(player1Point) === parseInt(player2Point)) winner.innerHTML = 'Draw!';
 
 

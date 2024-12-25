@@ -46,16 +46,28 @@
             </div>
             <div id="gameModeContainer">
                 <button onclick="goToSinglePlayer()"> Single Player </button>
-                <button onclick="window.location.href = '#'"> Multi Player </button>
+                <button onclick="goToMultiPlayer()"> Multi Player </button>
             </div>
 
             <script>
+
                 function goToSinglePlayer() {
                     const totalRoundIN = document.getElementById('totalRoundIN');
                     const gameChallenge = document.getElementById('gameChallenge');
                     if (totalRoundIN.value !== "") {
                         localStorage.setItem('totalRound', totalRoundIN.value);
                         localStorage.setItem('gameMode', 'Single Player Mode')
+                        localStorage.setItem('gameChallenge', gameChallenge.value);
+                        window.location.href = 'GamePlay/gamePlay.html';
+                    }
+                }
+
+                function goToMultiPlayer() {
+                    const totalRoundIN = document.getElementById('totalRoundIN');
+                    const gameChallenge = document.getElementById('gameChallenge');
+                    if (totalRoundIN.value !== "") {
+                        localStorage.setItem('totalRound', totalRoundIN.value);
+                        localStorage.setItem('gameMode', 'Multi Player Mode')
                         localStorage.setItem('gameChallenge', gameChallenge.value);
                         window.location.href = 'GamePlay/gamePlay.html';
                     }
